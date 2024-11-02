@@ -12,13 +12,13 @@
 // ==/UserScript==
 
 let BLUM_PARAMS = {
-	minBombHits: (Math.floor(Math.random() * (4 - 1) + 1 )),
+	minBombHits: (Math.floor(Math.random() * (3 - 1) + 1 )),
 	minIceHits: (Math.floor(Math.random() * (6 - 1) + 1 )),
 	flowerSkipPercentage: (Math.floor(Math.random() * (32 - 16) + 16 )),
-	minDelayMs: 555,
+	minDelayMs: 666,
 	maxDelayMs: 1212,
 	autoClickPlay: false,
-	dogsProbability: (95 + Math.random()) / 100
+	dogsProbability: (90 + Math.random()) / 100
 };
 
 let isGamePaused = false;
