@@ -16,9 +16,9 @@
 let BLUM_PARAMS = {
 	minBombHits: 0,
 	minIceHits: Math.floor(Math.random() * 3) + 1,
-	flowerSkipPercentage: Math.floor(Math.random() * 10) + 17,
+	flowerSkipPercentage: Math.floor(Math.random() * 10) + 14,
 	minDelayMs: 555,
-	maxDelayMs: 1212,
+	maxDelayMs: 1001,
 	autoClickPlay: false,
 	dogsProbability: (97 + Math.random()) / 100
 };
