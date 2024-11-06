@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Game
-// @version      0.1
+// @version      0.2
 // @namespace    Tamper Script
 // @author       quantumlab24
 // @match        https://telegram.blum.codes/*
@@ -11,15 +11,16 @@
 // @homepage     https://github.com/quantumlab24/blumgame
 // ==/UserScript==
 
+
+
 let BLUM_PARAMS = {
-	// minBombHits: (Math.floor(Math.random() * 2)),
 	minBombHits: 0,
-	minIceHits: (Math.floor(Math.random() * (6 - 1) + 1 )),
-	flowerSkipPercentage: (Math.floor(Math.random() * (32 - 16) + 16 )),
-	minDelayMs: 555,
-	maxDelayMs: 1212,
+	minIceHits: Math.floor(Math.random() * 3) + 1,
+	flowerSkipPercentage: Math.floor(Math.random() * 10) + 10,
+	minDelayMs: 500,
+	maxDelayMs: 999,
 	autoClickPlay: false,
-	dogsProbability: (95 + Math.random()) / 100
+	dogsProbability: (97 + Math.random()) / 100
 };
 
 let isGamePaused = false;
@@ -49,27 +50,28 @@ try {
 		switch (assetType) {
 			// Снежинки - тыквы
 			case "CLOVER":
-				clickedFlower(item);
+				processFlower(item);
 				break;
 			
 			// Бомбы
 			case "BOMB":
-				clickedBomb(item);
+				processBomb(item);
 				break;
-
+			
 			// Заморозка
 			case "FREEZE":
-				clickedIce(item);
+				processIce(item);
 				break;
-
+			
 			// Пёсики
 			case "DOGS":
-				clickedDogs(item);
+				processDogs(item);
 				break;
+			
 		}
 	}
 
-	function clickedFlower(item) {
+	function processFlower(item) {
 		const shouldSkip = Math.random() < (BLUM_PARAMS.flowerSkipPercentage / 100);
 		if (shouldSkip) {
 			blumStats.flowersSkipped++;
@@ -79,27 +81,32 @@ try {
 		}
 	}
 
-	function clickedBomb(item) {
-		blumStats.score = 0;
-		clickElement(item);
-		blumStats.bombHits++;
+	function processBomb(item) {
+		if (blumStats.bombHits < BLUM_PARAMS.minBombHits) {
+			blumStats.score = 0;
+			clickElement(item);
+			blumStats.bombHits++;
+		}
 	}
 
-	function clickedIce(item) {
+	function processIce(item) {
 		if (blumStats.iceHits < BLUM_PARAMS.minIceHits) {
 			clickElement(item);
 			blumStats.iceHits++;
 		}
 	}
 
-	function clickedDogs(item) {
+	function processDogs(item) {
 		if (Math.random() < BLUM_PARAMS.dogsProbability) {
 			clickElement(item);
 			blumStats.dogsHits++;
 		}
 	}
 
+	
+
 	function clickElement(item) {
+		if (isGamePaused) return;
 		const createEvent = (type, EventClass) => new EventClass(type, {
 			bubbles: true,
 			cancelable: true,
@@ -124,12 +131,12 @@ try {
 	}
 
 	function getClickDelay() {
-		const minDelay = BLUM_PARAMS.minDelayMs || 450;
-		const maxDelay = BLUM_PARAMS.maxDelayMs || 1199;
+		const minDelay = BLUM_PARAMS.minDelayMs || 666;
+		const maxDelay = BLUM_PARAMS.maxDelayMs || 1212;
 		return Math.random() * (maxDelay - minDelay) + minDelay;
 	}
 
-	function checkGameOver() {
+	function checkGameCompletion() {
 		const rewardElement = document.querySelector('#app > div > div > div.content > div.reward');
 		if (rewardElement && !blumStats.isGameOver) {
 			blumStats.isGameOver = true;
@@ -151,7 +158,7 @@ try {
 	const observer = new MutationObserver(mutations => {
 		for (const mutation of mutations) {
 			if (mutation.type === 'childList') {
-				checkGameOver();
+				checkGameCompletion();
 			}
 		}
 	});
@@ -164,7 +171,10 @@ try {
 		});
 	}
 
+	
+
+
 
 } catch (e) {
-	console.error("Blum error:", e);
+	
 }
