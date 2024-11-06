@@ -12,7 +12,8 @@
 // ==/UserScript==
 
 let BLUM_PARAMS = {
-	minBombHits: (Math.floor(Math.random() * 2)),
+	// minBombHits: (Math.floor(Math.random() * 2)),
+	minBombHits: 0,
 	minIceHits: (Math.floor(Math.random() * (6 - 1) + 1 )),
 	flowerSkipPercentage: (Math.floor(Math.random() * (32 - 16) + 16 )),
 	minDelayMs: 555,
