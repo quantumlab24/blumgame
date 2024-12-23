@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Game
-// @version      0.2
+// @version      0.3
 // @namespace    Tamper Script
 // @author       quantumlab24
 // @match        https://telegram.blum.codes/*
@@ -17,8 +17,10 @@ let BLUM_PARAMS = {
 	minBombHits: 0,
 	minIceHits: Math.floor(Math.random() * 3) + 1,
 	flowerSkipPercentage: Math.floor(Math.random() * 10) + 14,
-	minDelayMs: 555,
-	maxDelayMs: 1001,
+	trumpSkipPercentage: Math.floor(Math.random() * 10) + 13,
+	harrisSkipPercentage: Math.floor(Math.random() * 10) + 15,
+	minDelayMs: 449,
+	maxDelayMs: 889,
 	autoClickPlay: false,
 	dogsProbability: (97 + Math.random()) / 100
 };
@@ -31,6 +33,8 @@ try {
 		bombHits: 0,
 		iceHits: 0,
 		dogsHits: 0,
+		trumpHits: 0,
+		harrisHits: 0,
 		flowersSkipped: 0,
 		isGameOver: false,
 	};
@@ -67,6 +71,16 @@ try {
 			case "DOGS":
 				processDogs(item);
 				break;
+
+			// TRUMP
+			case "TRUMP":
+				processTrump(item);
+				break;
+				
+			// HARRIS
+			case "HARRIS":
+				processHarris(item);
+				break;
 			
 		}
 	}
@@ -75,6 +89,26 @@ try {
 		const shouldSkip = Math.random() < (BLUM_PARAMS.flowerSkipPercentage / 100);
 		if (shouldSkip) {
 			blumStats.flowersSkipped++;
+		} else {
+			blumStats.score++;
+			clickElement(item);
+		}
+	}
+
+	function processTrump(item) {
+		const shouldSkip = Math.random() < (BLUM_PARAMS.trumpSkipPercentage / 100);
+		if (shouldSkip) {
+			blumStats.trumpHits++;
+		} else {
+			blumStats.score++;
+			clickElement(item);
+		}
+	}
+
+	function processHarris(item) {
+		const shouldSkip = Math.random() < (BLUM_PARAMS.harrisSkipPercentage / 100);
+		if (shouldSkip) {
+			blumStats.harrisHits++;
 		} else {
 			blumStats.score++;
 			clickElement(item);
@@ -131,8 +165,8 @@ try {
 	}
 
 	function getClickDelay() {
-		const minDelay = BLUM_PARAMS.minDelayMs || 666;
-		const maxDelay = BLUM_PARAMS.maxDelayMs || 1212;
+		const minDelay = BLUM_PARAMS.minDelayMs || 555;
+		const maxDelay = BLUM_PARAMS.maxDelayMs || 1010;
 		return Math.random() * (maxDelay - minDelay) + minDelay;
 	}
 
