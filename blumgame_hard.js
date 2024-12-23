@@ -17,6 +17,8 @@ let BLUM_PARAMS = {
 	minBombHits: 0,
 	minIceHits: Math.floor(Math.random() * 3) + 1,
 	flowerSkipPercentage: Math.floor(Math.random() * 10) + 14,
+	trumpSkipPercentage: Math.floor(Math.random() * 10) + 8,
+	harrisSkipPercentage: Math.floor(Math.random() * 10) + 9,
 	minDelayMs: 120,
 	maxDelayMs: 150,
 	autoClickPlay: false,
@@ -30,6 +32,8 @@ try {
 		score: 0,
 		bombHits: 0,
 		iceHits: 0,
+		trumpHits: 0,
+		harrisHits: 0,
 		dogsHits: 0,
 		flowersSkipped: 0,
 		isGameOver: false,
@@ -67,6 +71,16 @@ try {
 			case "DOGS":
 				processDogs(item);
 				break;
+				
+			// TRUMP
+			case "TRUMP":
+				processTrump(item);
+				break;
+				
+			// HARRIS
+			case "HARRIS":
+				processHarris(item);
+				break;
 			
 		}
 	}
@@ -75,6 +89,26 @@ try {
 		const shouldSkip = Math.random() < (BLUM_PARAMS.flowerSkipPercentage / 100);
 		if (shouldSkip) {
 			blumStats.flowersSkipped++;
+		} else {
+			blumStats.score++;
+			clickElement(item);
+		}
+	}
+
+	function processTrump(item) {
+		const shouldSkip = Math.random() < (BLUM_PARAMS.trumpSkipPercentage / 100);
+		if (shouldSkip) {
+			blumStats.trumpHits++;
+		} else {
+			blumStats.score++;
+			clickElement(item);
+		}
+	}
+
+	function processHarris(item) {
+		const shouldSkip = Math.random() < (BLUM_PARAMS.harrisSkipPercentage / 100);
+		if (shouldSkip) {
+			blumStats.harrisHits++;
 		} else {
 			blumStats.score++;
 			clickElement(item);
